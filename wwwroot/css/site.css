@@ -1,0 +1,333 @@
+/* ==========================================================================
+   VETERINARIA "EL ARCA DE MOE" - SISTEMA DE GESTIÓN CLÍNICA
+   Diseño profesional, ergonómico y sobrio para administración veterinaria
+   ========================================================================== */
+
+:root {
+    --primary-color: #0d6b63;
+    --primary-hover: #0a524c;
+    --primary-light: #e6f4f2;
+    --secondary-color: #334155;
+    --accent-color: #0284c7;
+    --bg-surface: #ffffff;
+    --bg-page: #f8fafc;
+    --border-color: #e2e8f0;
+    --border-focus: #14b8a6;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    
+    /* Estados de Citas */
+    --status-pending-bg: #fef3c7;
+    --status-pending-text: #92400e;
+    --status-pending-border: #fde68a;
+
+    --status-completed-bg: #d1fae5;
+    --status-completed-text: #065f46;
+    --status-completed-border: #a7f3d0;
+
+    --status-cancelled-bg: #fee2e2;
+    --status-cancelled-text: #991b1b;
+    --status-cancelled-border: #fecaca;
+
+    /* Estados Activo / Inactivo */
+    --status-active-bg: #e0f2fe;
+    --status-active-text: #0369a1;
+    --status-inactive-bg: #f1f5f9;
+    --status-inactive-text: #475569;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header & Barra Superior */
+.top-clinic-bar {
+    background-color: #0b4e48;
+    color: #e2f4f2;
+    font-size: 0.825rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid #083b37;
+}
+
+.top-clinic-bar a {
+    color: #e2f4f2;
+    text-decoration: none;
+}
+
+.top-clinic-bar a:hover {
+    text-decoration: underline;
+}
+
+.clinic-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+    padding: 0.75rem 0;
+}
+
+.navbar-brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary-color) !important;
+    text-decoration: none;
+}
+
+.navbar-brand-logo .brand-icon {
+    width: 38px;
+    height: 38px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.clinic-navbar .nav-link {
+    font-weight: 500;
+    color: #334155;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 6px;
+    transition: all 0.15s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.clinic-navbar .nav-link:hover {
+    color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.clinic-navbar .nav-link.active {
+    color: var(--primary-color);
+    background-color: var(--primary-light);
+    font-weight: 600;
+}
+
+/* Tarjetas y Contenedores */
+.clinic-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.clinic-card-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.clinic-card-header h5, .clinic-card-header h6 {
+    margin: 0;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.clinic-card-body {
+    padding: 1.25rem;
+}
+
+/* Indicadores / Badges de Estado */
+.badge-status {
+    font-size: 0.775rem;
+    font-weight: 600;
+    padding: 0.35em 0.7em;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-transform: capitalize;
+}
+
+.badge-status-pendiente {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-text);
+    border: 1px solid var(--status-pending-border);
+}
+
+.badge-status-completada {
+    background-color: var(--status-completed-bg);
+    color: var(--status-completed-text);
+    border: 1px solid var(--status-completed-border);
+}
+
+.badge-status-cancelada {
+    background-color: var(--status-cancelled-bg);
+    color: var(--status-cancelled-text);
+    border: 1px solid var(--status-cancelled-border);
+}
+
+.badge-status-activo {
+    background-color: var(--status-active-bg);
+    color: var(--status-active-text);
+    border: 1px solid #bae6fd;
+}
+
+.badge-status-inactivo {
+    background-color: var(--status-inactive-bg);
+    color: var(--status-inactive-text);
+    border: 1px solid #cbd5e1;
+}
+
+/* Tablas Clínicas */
+.clinic-table {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.clinic-table thead th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+}
+
+.clinic-table tbody td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.clinic-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Botones y Controles */
+.btn-clinic-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.45rem 0.95rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-clinic-primary:hover, .btn-clinic-primary:focus {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #ffffff;
+}
+
+.btn-clinic-outline {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    color: #334155;
+    font-weight: 500;
+    padding: 0.45rem 0.95rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-clinic-outline:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+/* Métricas del Dashboard */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.1s ease;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.stat-icon.primary { background-color: var(--primary-light); color: var(--primary-color); }
+.stat-icon.warning { background-color: #fef3c7; color: #b45309; }
+.stat-icon.success { background-color: #d1fae5; color: #047857; }
+.stat-icon.info { background-color: #e0f2fe; color: #0284c7; }
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Formularios Clínicos */
+.form-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #334155;
+    margin-bottom: 0.35rem;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+}
+
+/* Ficha Clínica / Diagnóstico */
+.medical-box {
+    background-color: #f8fafc;
+    border-left: 4px solid var(--primary-color);
+    padding: 1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin-top: 0.5rem;
+}
+
+/* Footer */
+footer.clinic-footer {
+    margin-top: auto;
+    background-color: #ffffff;
+    border-top: 1px solid var(--border-color);
+    padding: 1.25rem 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}

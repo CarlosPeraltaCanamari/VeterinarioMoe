@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Veterinaria El Arca de Moe</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="top-clinic-bar d-none d-md-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <span class="me-3"><i class="bi bi-geo-alt-fill me-1"></i> Av. Siempre Viva 742, Springfield</span>
+                <span><i class="bi bi-telephone-fill me-1"></i> Urgencias 24/7: +56 9 8765 4321</span>
+            </div>
+            <div>
+                <span class="me-3"><i class="bi bi-clock-fill me-1"></i> Lunes a Sábado: 08:30 - 20:00</span>
+                <span><i class="bi bi-shield-check me-1"></i> Sistema Seguro SSL</span>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav class="navbar navbar-expand-lg clinic-navbar">
+            <div class="container">
+                <a class="navbar-brand navbar-brand-logo" asp-page="/Index">
+                    <span class="brand-icon">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </span>
+                    <span>El Arca de Moe</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#clinicNavbarContent"
+                        aria-controls="clinicNavbarContent" aria-expanded="false" aria-label="Navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="clinicNavbarContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Index">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Citas/Index">
+                                <i class="bi bi-calendar-check"></i> Citas Médicas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Mascotas/Index">
+                                <i class="bi bi-hearts"></i> Pacientes (Mascotas)
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Propietarios/Index">
+                                <i class="bi bi-people"></i> Propietarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Veterinarios/Index">
+                                <i class="bi bi-person-badge"></i> Veterinarios
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="dropdown">
+                                <button class="btn btn-clinic-outline dropdown-toggle py-1 px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle text-primary"></i>
+                                    <span class="fw-semibold">@User.Identity.Name</span>
+                                    <span class="badge bg-secondary ms-1" style="font-size: 0.7rem;">
+                                        @(User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Personal")
+                                    </span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li class="dropdown-header">Sesión Clínica Activa</li>
+                                    <li><a class="dropdown-item" asp-page="/Citas/Create"><i class="bi bi-plus-circle me-2"></i>Nueva Cita</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Mascotas/Create"><i class="bi bi-plus-circle me-2"></i>Registrar Mascota</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="post" asp-page="/Account/Logout" class="px-2">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100 text-start">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-page="/Account/Login" class="btn btn-clinic-primary btn-sm">
+                                <i class="bi bi-box-arrow-in-right"></i> Acceso Personal
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main" class="flex-grow-1 py-4">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+    <footer class="clinic-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <div>
+                <strong>Clínica Veterinaria El Arca de Moe</strong> &copy; @DateTime.Now.Year. Todos los derechos reservados.
+            </div>
+            <div class="text-muted small">
+                <span>Gestión de Citas y Diagnósticos Clínicos</span> &bull; 
+                <a asp-page="/Privacy" class="text-decoration-none text-muted">Políticas de Privacidad</a>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
