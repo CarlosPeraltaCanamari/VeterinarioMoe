@@ -1,0 +1,71 @@
+@page
+@model PW3_04.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Acceso al Sistema";
+}
+
+<div class="row justify-content-center py-4">
+    <div class="col-md-7 col-lg-5">
+        <div class="clinic-card">
+            <div class="clinic-card-header bg-white border-bottom py-3 text-center">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-2" style="width: 48px; height: 48px;">
+                    <i class="bi bi-shield-lock-fill fs-4 text-success"></i>
+                </div>
+                <h4 class="fw-bold mb-1">Acceso de Personal Clínico</h4>
+                <p class="text-muted small mb-0">Veterinaria El Arca de Moe &bull; Control de Citas</p>
+            </div>
+            
+            <div class="clinic-card-body p-4">
+                <form method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Correo Electrónico Institucional</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="usuario@elarcademoe.com" />
+                        </div>
+                        <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">Contraseña de Acceso</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="bi bi-key"></i></span>
+                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="••••••••" />
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input asp-for="Input.RememberMe" class="form-check-input" />
+                        <label asp-for="Input.RememberMe" class="form-check-label small text-muted">
+                            Mantener sesión iniciada
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-clinic-primary w-100 py-2 justify-content-center">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión Segura
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top">
+                    <div class="alert alert-light border small text-muted mb-0">
+                        <div class="fw-bold text-dark mb-1"><i class="bi bi-info-circle-fill text-primary me-1"></i> Cuentas del Sistema (Demostración):</div>
+                        <ul class="mb-0 ps-3">
+                            <li><strong>Administrador:</strong> admin@elarcademoe.com / <code>Admin123!</code></li>
+                            <li><strong>Veterinario:</strong> moe@elarcademoe.com / <code>Vet123!</code></li>
+                            <li><strong>Recepción:</strong> recepcion@elarcademoe.com / <code>Recepcion123!</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
