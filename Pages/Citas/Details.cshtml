@@ -1,0 +1,152 @@
+﻿@page "{id:int}"
+@model PW3_04.Pages.Citas.DetailsModel
+@{
+    ViewData["Title"] = $"Cita #{Model.Cita.Id} - {Model.Cita.Mascota?.Nombre}";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h4 class="fw-bold mb-1"><i class="bi bi-calendar2-check text-primary me-2"></i>Ficha de Consulta Médica</h4>
+        <p class="text-muted small mb-0">Cita #@Model.Cita.Id &bull; Registrada el @Model.Cita.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="./Index" class="btn btn-clinic-outline">
+            <i class="bi bi-arrow-left"></i> Agenda
+        </a>
+        @if (Model.Cita.Estado == EstadosCita.Pendiente)
+        {
+            <a asp-page="./Atender" asp-route-id="@Model.Cita.Id" class="btn btn-clinic-primary">
+                <i class="bi bi-stethoscope"></i> Atender y Diagnosticar
+            </a>
+        }
+        <a asp-page="./Edit" asp-route-id="@Model.Cita.Id" class="btn btn-clinic-outline">
+            <i class="bi bi-pencil"></i> Editar
+        </a>
+        <button type="button" class="btn btn-clinic-outline" onclick="window.print();">
+            <i class="bi bi-printer"></i> Imprimir Ficha
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="clinic-card mb-4">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-file-earmark-medical me-1"></i> Estado y Evaluación Médica</h6>
+                <div>
+                    @if (Model.Cita.Estado == EstadosCita.Pendiente)
+                    {
+                        <span class="badge-status badge-status-pendiente">Pendiente</span>
+                    }
+                    else if (Model.Cita.Estado == EstadosCita.Completada)
+                    {
+                        <span class="badge-status badge-status-completada">Completada</span>
+                    }
+                    else
+                    {
+                        <span class="badge-status badge-status-cancelada">Cancelada</span>
+                    }
+                </div>
+            </div>
+            <div class="clinic-card-body">
+                <div class="mb-3">
+                    <strong class="text-muted small d-block">Fecha y Hora de Atención:</strong>
+                    <div class="fs-5 fw-bold text-dark">
+                        <i class="bi bi-clock text-primary me-2"></i>@Model.Cita.FechaHora.ToString("dd/MM/yyyy HH:mm") hrs
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-muted small d-block">Motivo de la Cita:</strong>
+                    <p class="mb-0 bg-light p-3 rounded border">@Model.Cita.Motivo</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Cita.Diagnostico))
+                {
+                    <div class="mb-4">
+                        <strong class="text-primary small d-block fw-bold mb-1">
+                            <i class="bi bi-clipboard2-pulse me-1"></i> Diagnóstico Clínico Emitido:
+                        </strong>
+                        <div class="p-3 bg-white border border-primary-subtle rounded text-dark shadow-sm" style="border-left: 4px solid var(--primary-color) !important;">
+                            @Model.Cita.Diagnostico
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning small mb-4">
+                        <i class="bi bi-info-circle me-1"></i> Esta cita aún no posee un diagnóstico registrado. 
+                        @if (Model.Cita.Estado == EstadosCita.Pendiente)
+                        {
+                            <span><a asp-page="./Atender" asp-route-id="@Model.Cita.Id" class="fw-bold alert-link">Registrar atención ahora</a>.</span>
+                        }
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Cita.Tratamiento))
+                {
+                    <div>
+                        <strong class="text-success small d-block fw-bold mb-1">
+                            <i class="bi bi-prescription2 me-1"></i> Tratamiento y Receta Médica:
+                        </strong>
+                        <div class="p-3 bg-white border border-success-subtle rounded text-dark shadow-sm" style="border-left: 4px solid #059669 !important;">
+                            @Model.Cita.Tratamiento
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="clinic-card mb-3">
+            <div class="clinic-card-header bg-light py-2">
+                <h6 class="mb-0 small fw-bold"><i class="bi bi-heart-pulse me-1"></i> Paciente</h6>
+            </div>
+            <div class="clinic-card-body small">
+                @if (Model.Cita.Mascota != null)
+                {
+                    <h5 class="fw-bold mb-1 text-primary">@Model.Cita.Mascota.Nombre</h5>
+                    <div><strong>Especie:</strong> @Model.Cita.Mascota.Especie</div>
+                    <div><strong>Raza:</strong> @(string.IsNullOrEmpty(Model.Cita.Mascota.Raza) ? "Mestizo" : Model.Cita.Mascota.Raza)</div>
+                    <div><strong>Sexo:</strong> @Model.Cita.Mascota.Sexo</div>
+                    <div><strong>Peso:</strong> @(Model.Cita.Mascota.PesoKg.HasValue ? $"{Model.Cita.Mascota.PesoKg} kg" : "No registrado")</div>
+                    <div class="mt-2 pt-2 border-top">
+                        <a asp-page="/Mascotas/Details" asp-route-id="@Model.Cita.MascotaId" class="text-decoration-none">
+                            Ver Historial Clínico Completo &rarr;
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="clinic-card mb-3">
+            <div class="clinic-card-header bg-light py-2">
+                <h6 class="mb-0 small fw-bold"><i class="bi bi-person me-1"></i> Tutor Responsable</h6>
+            </div>
+            <div class="clinic-card-body small">
+                @if (Model.Cita.Mascota?.Propietario != null)
+                {
+                    <h6 class="fw-bold mb-1">@Model.Cita.Mascota.Propietario.NombreCompleto</h6>
+                    <div><i class="bi bi-telephone text-primary me-1"></i> @Model.Cita.Mascota.Propietario.Telefono</div>
+                    <div><i class="bi bi-envelope text-primary me-1"></i> @Model.Cita.Mascota.Propietario.Email</div>
+                    @if (!string.IsNullOrEmpty(Model.Cita.Mascota.Propietario.Direccion))
+                    {
+                        <div><i class="bi bi-geo-alt text-primary me-1"></i> @Model.Cita.Mascota.Propietario.Direccion</div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="clinic-card">
+            <div class="clinic-card-header bg-light py-2">
+                <h6 class="mb-0 small fw-bold"><i class="bi bi-person-badge me-1"></i> Veterinario Asignado</h6>
+            </div>
+            <div class="clinic-card-body small">
+                @if (Model.Cita.Veterinario != null)
+                {
+                    <h6 class="fw-bold mb-1">@Model.Cita.Veterinario.NombreCompleto</h6>
+                    <span class="badge bg-light text-dark border mb-2">@Model.Cita.Veterinario.Especialidad</span>
+                    <div><i class="bi bi-telephone text-primary me-1"></i> @Model.Cita.Veterinario.Telefono</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

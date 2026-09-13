@@ -1,0 +1,107 @@
+@page
+@model PW3_04.Pages.Mascotas.CreateModel
+@{
+    ViewData["Title"] = "Registrar Mascota";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-heart-pulse text-primary me-2"></i>Ficha de Nueva Mascota</h4>
+                <p class="text-muted small mb-0">Registre el paciente asociándolo a un tutor responsable</p>
+            </div>
+            <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+
+        <div class="clinic-card">
+            <div class="clinic-card-body p-4">
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Mascota.PropietarioId" class="form-label">Tutor / Propietario Responsable</label>
+                        <select asp-for="Mascota.PropietarioId" asp-items="Model.PropietariosList" class="form-select">
+                            <option value="">-- Seleccione un propietario registrado --</option>
+                        </select>
+                        <span asp-validation-for="Mascota.PropietarioId" class="text-danger small"></span>
+                        <div class="form-text small">
+                            ¿El tutor no está registrado? <a asp-page="/Propietarios/Create" target="_blank">Crear nuevo tutor aquí</a>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.Nombre" class="form-label"></label>
+                            <input asp-for="Mascota.Nombre" class="form-control" placeholder="Ej: Toby, Pelusa, Rocky" />
+                            <span asp-validation-for="Mascota.Nombre" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.Especie" class="form-label"></label>
+                            <select asp-for="Mascota.Especie" class="form-select">
+                                <option value="Canino">Canino (Perro)</option>
+                                <option value="Felino">Felino (Gato)</option>
+                                <option value="Ave">Ave</option>
+                                <option value="Roedor">Roedor (Conejo, Cobayo, etc.)</option>
+                                <option value="Reptil">Reptil</option>
+                                <option value="Otro">Otro animal de compañía</option>
+                            </select>
+                            <span asp-validation-for="Mascota.Especie" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.Raza" class="form-label"></label>
+                            <input asp-for="Mascota.Raza" class="form-control" placeholder="Ej: Golden Retriever, Siamés, Mestizo" />
+                            <span asp-validation-for="Mascota.Raza" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.FechaNacimiento" class="form-label"></label>
+                            <input asp-for="Mascota.FechaNacimiento" type="date" class="form-control" />
+                            <span asp-validation-for="Mascota.FechaNacimiento" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.Sexo" class="form-label"></label>
+                            <select asp-for="Mascota.Sexo" class="form-select">
+                                <option value="Macho">Macho</option>
+                                <option value="Hembra">Hembra</option>
+                            </select>
+                            <span asp-validation-for="Mascota.Sexo" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Mascota.PesoKg" class="form-label">Peso Corporal (Kg)</label>
+                            <input asp-for="Mascota.PesoKg" type="number" step="0.01" class="form-control" placeholder="Ej: 14.50" />
+                            <span asp-validation-for="Mascota.PesoKg" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 form-check form-switch">
+                        <input asp-for="Mascota.Estado" class="form-check-input" type="checkbox" role="switch" checked />
+                        <label asp-for="Mascota.Estado" class="form-check-label fw-semibold">
+                            Paciente Activo
+                        </label>
+                        <div class="form-text small">Indica si el paciente se encuentra activo para consultas médicas y tratamientos.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                        <a asp-page="./Index" class="btn btn-clinic-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-clinic-primary">
+                            <i class="bi bi-check-lg"></i> Guardar Ficha de Mascota
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

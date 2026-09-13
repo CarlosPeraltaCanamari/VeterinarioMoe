@@ -1,0 +1,51 @@
+@page
+@model PW3_04.Pages.Mascotas.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar Paciente";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="clinic-card border-danger">
+            <div class="clinic-card-header bg-danger-subtle text-danger py-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación de Paciente</h5>
+            </div>
+            <div class="clinic-card-body p-4">
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-warning small mb-3">
+                        <i class="bi bi-shield-exclamation me-1"></i> @Model.ErrorMessage
+                    </div>
+                }
+                else
+                {
+                    <p class="text-danger fw-semibold">
+                        ¿Está seguro de eliminar el registro de este paciente?
+                    </p>
+                }
+
+                <div class="border rounded p-3 bg-light mb-4">
+                    <h6 class="fw-bold text-dark mb-2">@Model.Mascota.Nombre</h6>
+                    <ul class="list-unstyled mb-0 small text-muted">
+                        <li><strong>Especie y Raza:</strong> @Model.Mascota.Especie - @(string.IsNullOrEmpty(Model.Mascota.Raza) ? "Mestizo" : Model.Mascota.Raza)</li>
+                        <li><strong>Tutor:</strong> @(Model.Mascota.Propietario?.NombreCompleto ?? "Sin asignar")</li>
+                        <li><strong>Consultas Registradas:</strong> @Model.Mascota.Citas.Count</li>
+                        <li><strong>Estado Actual:</strong> @(Model.Mascota.Estado ? "Activo" : "Inactivo")</li>
+                    </ul>
+                </div>
+
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Mascota.Id" />
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-page="./Index" class="btn btn-clinic-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-danger" disabled="@(!string.IsNullOrEmpty(Model.ErrorMessage))">
+                            <i class="bi bi-trash-fill me-1"></i> Sí, Eliminar Definitivamente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

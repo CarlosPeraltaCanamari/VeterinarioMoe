@@ -1,0 +1,130 @@
+﻿@page
+@model PW3_04.Pages.Veterinarios.IndexModel
+@{
+    ViewData["Title"] = "Equipo Veterinario";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-person-badge-fill text-secondary me-2"></i>Equipo Médico Veterinario</h3>
+        <p class="text-muted small mb-0">Especialistas y profesionales de la salud animal en El Arca de Moe</p>
+    </div>
+    <a asp-page="Create" class="btn btn-clinic-primary">
+        <i class="bi bi-person-plus-fill"></i> Registrar Veterinario
+    </a>
+</div>
+<div class="clinic-card mb-4">
+    <div class="clinic-card-body py-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" name="Buscar" value="@Model.Buscar" class="form-control" placeholder="Buscar por nombre, especialidad o teléfono..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="EstadoFiltro" class="form-select form-select-sm">
+                    <option value="">Todos los Estados</option>
+                    <option value="activo" selected="@(Model.EstadoFiltro == "activo")">Activos / En Servicio</option>
+                    <option value="inactivo" selected="@(Model.EstadoFiltro == "inactivo")">Inactivos</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-clinic-primary flex-grow-1">Filtrar</button>
+                @if (!string.IsNullOrEmpty(Model.Buscar) || !string.IsNullOrEmpty(Model.EstadoFiltro))
+                {
+                    <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">Limpiar</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="clinic-card">
+    <div class="clinic-card-header">
+        <h6><i class="bi bi-list-ul me-1"></i> Profesionales Registrados (@Model.Veterinarios.Count)</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table clinic-table">
+            <thead>
+                <tr>
+                    <th>Profesional</th>
+                    <th>Especialidad Clínica</th>
+                    <th>Teléfono de Contacto</th>
+                    <th>Correo Electrónico</th>
+                    <th>Citas Atendidas</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Veterinarios.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-folder-x fs-3 d-block mb-1"></i>
+                            No se encontraron profesionales registrados con ese criterio.
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Model.Veterinarios)
+                {
+                    <tr>
+                        <td class="fw-semibold">
+                            <i class="bi bi-stethoscope text-primary me-2"></i>@item.NombreCompleto
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                @item.Especialidad
+                            </span>
+                        </td>
+                        <td>
+                            <a href="tel:@item.Telefono" class="text-decoration-none text-dark">
+                                <i class="bi bi-telephone me-1 text-muted"></i>@item.Telefono
+                            </a>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Email))
+                            {
+                                <a href="mailto:@item.Email" class="text-decoration-none text-muted">
+                                    @item.Email
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No registrado</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">
+                                @(item.Citas?.Count ?? 0) consulta(s)
+                            </span>
+                        </td>
+                        <td>
+                            @if (item.Estado)
+                            {
+                                <span class="badge-status badge-status-activo">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-status-inactivo">Inactivo</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Ficha y Agenda">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Modificar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-clinic-outline text-danger py-1 px-2" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

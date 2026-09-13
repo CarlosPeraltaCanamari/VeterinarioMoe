@@ -1,0 +1,136 @@
+﻿@page
+@model PW3_04.Pages.Veterinarios.DetailsModel
+@{
+    ViewData["Title"] = $"Ficha Médica - {Model.Veterinario.NombreCompleto}";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h4 class="fw-bold mb-1"><i class="bi bi-person-badge text-primary me-2"></i>Ficha del Profesional</h4>
+        <p class="text-muted small mb-0">ID #@Model.Veterinario.Id &bull; @Model.Veterinario.NombreCompleto</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="./Index" class="btn btn-clinic-outline">
+            <i class="bi bi-arrow-left"></i> Directorio
+        </a>
+        <a asp-page="./Edit" asp-route-id="@Model.Veterinario.Id" class="btn btn-clinic-primary">
+            <i class="bi bi-pencil"></i> Modificar Datos
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="clinic-card mb-4">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-person me-1"></i> Perfil Clínico</h6>
+                @if (Model.Veterinario.Estado)
+                {
+                    <span class="badge-status badge-status-activo">En Servicio</span>
+                }
+                else
+                {
+                    <span class="badge-status badge-status-inactivo">Inactivo</span>
+                }
+            </div>
+            <div class="clinic-card-body">
+                <dl class="row mb-0 small">
+                    <dt class="col-5 text-muted">Nombre:</dt>
+                    <dd class="col-7 fw-bold">@Model.Veterinario.NombreCompleto</dd>
+
+                    <dt class="col-5 text-muted">Especialidad:</dt>
+                    <dd class="col-7"><span class="badge bg-light text-dark border">@Model.Veterinario.Especialidad</span></dd>
+
+                    <dt class="col-5 text-muted">Teléfono:</dt>
+                    <dd class="col-7">
+                        <a href="tel:@Model.Veterinario.Telefono" class="text-decoration-none text-dark">
+                            <i class="bi bi-telephone text-primary me-1"></i>@Model.Veterinario.Telefono
+                        </a>
+                    </dd>
+
+                    <dt class="col-5 text-muted">Correo:</dt>
+                    <dd class="col-7">
+                        @if (!string.IsNullOrEmpty(Model.Veterinario.Email))
+                        {
+                            <a href="mailto:@Model.Veterinario.Email" class="text-decoration-none text-muted">
+                                <i class="bi bi-envelope text-primary me-1"></i>@Model.Veterinario.Email
+                            </a>
+                        }
+                        else
+                        {
+                            <span>No registrado</span>
+                        }
+                    </dd>
+
+                    <dt class="col-5 text-muted">Incorporación:</dt>
+                    <dd class="col-7">@Model.Veterinario.FechaRegistro.ToString("dd/MM/yyyy")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="clinic-card">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-calendar3 me-1"></i> Agenda de Citas Asignadas (@Model.Veterinario.Citas.Count)</h6>
+                <a asp-page="/Citas/Create" class="btn btn-sm btn-clinic-primary">
+                    <i class="bi bi-calendar-plus"></i> Agendar Cita
+                </a>
+            </div>
+            <div class="clinic-card-body p-0">
+                @if (!Model.Veterinario.Citas.Any())
+                {
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-calendar-check fs-2 d-block mb-1"></i>
+                        Este profesional no tiene citas registradas en el sistema.
+                    </div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var cita in Model.Veterinario.Citas.OrderByDescending(c => c.FechaHora))
+                        {
+                            <div class="list-group-item p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <div>
+                                        <strong>@cita.FechaHora.ToString("dd/MM/yyyy HH:mm")</strong>
+                                        &bull; 
+                                        <span>Paciente: <strong>@(cita.Mascota?.Nombre ?? "Sin Mascota")</strong></span>
+                                        <span class="text-muted">(@(cita.Mascota?.Especie))</span>
+                                    </div>
+                                    <div>
+                                        @if (cita.Estado == EstadosCita.Pendiente)
+                                        {
+                                            <span class="badge-status badge-status-pendiente">Pendiente</span>
+                                        }
+                                        else if (cita.Estado == EstadosCita.Completada)
+                                        {
+                                            <span class="badge-status badge-status-completada">Completada</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge-status badge-status-cancelada">Cancelada</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    <strong>Motivo:</strong> @cita.Motivo &bull; Tutor: @(cita.Mascota?.Propietario?.NombreCompleto)
+                                </div>
+                                <div class="text-end">
+                                    @if (cita.Estado == EstadosCita.Pendiente)
+                                    {
+                                        <a asp-page="/Citas/Atender" asp-route-id="@cita.Id" class="btn btn-sm btn-clinic-primary py-0 px-2">
+                                            <i class="bi bi-stethoscope me-1"></i> Atender
+                                        </a>
+                                    }
+                                    <a asp-page="/Citas/Details" asp-route-id="@cita.Id" class="btn btn-sm btn-clinic-outline py-0 px-2">
+                                        Ver Cita
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

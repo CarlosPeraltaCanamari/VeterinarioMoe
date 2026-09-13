@@ -1,0 +1,97 @@
+﻿@page "{id:int}"
+@model PW3_04.Pages.Citas.AtenderModel
+@{
+    ViewData["Title"] = $"Atención Médica - {Model.Cita.Mascota?.Nombre}";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-stethoscope text-primary me-2"></i>Consulta Veterinaria en Curso</h4>
+                <p class="text-muted small mb-0">Paciente: <strong>@Model.Cita.Mascota?.Nombre</strong> &bull; Turno: @Model.Cita.FechaHora.ToString("dd/MM/yyyy HH:mm")</p>
+            </div>
+            <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">
+                <i class="bi bi-arrow-left"></i> Agenda de Citas
+            </a>
+        </div>
+        <div class="clinic-card mb-3">
+            <div class="clinic-card-header bg-light">
+                <h6 class="mb-0"><i class="bi bi-info-circle me-1"></i> Resumen Clínico del Paciente</h6>
+                <span class="badge bg-secondary">@(Model.Cita.Mascota?.Especie)</span>
+            </div>
+            <div class="clinic-card-body py-3">
+                <div class="row small g-2">
+                    <div class="col-md-3"><strong>Especie / Raza:</strong> @Model.Cita.Mascota?.Especie - @Model.Cita.Mascota?.Raza</div>
+                    <div class="col-md-3"><strong>Sexo:</strong> @Model.Cita.Mascota?.Sexo</div>
+                    <div class="col-md-3"><strong>Tutor:</strong> @Model.Cita.Mascota?.Propietario?.NombreCompleto</div>
+                    <div class="col-md-3"><strong>Teléfono:</strong> @Model.Cita.Mascota?.Propietario?.Telefono</div>
+                    <div class="col-12 mt-2 pt-2 border-top">
+                        <strong class="text-danger"><i class="bi bi-chat-left-dots me-1"></i>Motivo de Ingreso / Síntomas:</strong>
+                        <div class="p-2 bg-light rounded mt-1 border">@Model.Cita.Motivo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clinic-card">
+            <div class="clinic-card-header bg-white">
+                <h6><i class="bi bi-clipboard2-pulse me-1"></i> Emisión de Diagnóstico y Receta</h6>
+            </div>
+            <div class="clinic-card-body p-4">
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Input.Id" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Input.PesoActualizado" class="form-label">Control de Peso en Consulta (Kg)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-speedometer"></i></span>
+                                <input asp-for="Input.PesoActualizado" type="number" step="0.01" class="form-control" placeholder="Ej: 14.20" />
+                            </div>
+                            <span asp-validation-for="Input.PesoActualizado" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Médico a Cargo</label>
+                            <input type="text" class="form-control bg-light" value="@Model.Cita.Veterinario?.NombreCompleto" readonly />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Diagnostico" class="form-label text-primary fw-bold">
+                            <i class="bi bi-journal-medical me-1"></i> Diagnóstico Clínico Definitivo / Presuntivo
+                        </label>
+                        <textarea asp-for="Input.Diagnostico" class="form-control" rows="4" placeholder="Describa el examen físico, hallazgos, signos clínicos y conclusión diagnóstica..."></textarea>
+                        <span asp-validation-for="Input.Diagnostico" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Tratamiento" class="form-label text-success fw-bold">
+                            <i class="bi bi-prescription2 me-1"></i> Indicaciones Terapéuticas y Receta Médica
+                        </label>
+                        <textarea asp-for="Input.Tratamiento" class="form-control" rows="4" placeholder="Fármacos prescritos, dosificación, frecuencia, duración y recomendaciones de cuidado para el tutor..."></textarea>
+                        <span asp-validation-for="Input.Tratamiento" class="text-danger small"></span>
+                    </div>
+
+                    <div class="alert alert-success d-flex align-items-center small py-2">
+                        <i class="bi bi-check2-circle fs-4 me-2"></i>
+                        <div>Al confirmar esta ficha, el estado de la cita cambiará automáticamente a <strong>Completada</strong> y se anexará al historial clínico del paciente.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                        <a asp-page="./Index" class="btn btn-clinic-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-clinic-primary">
+                            <i class="bi bi-save2 me-1"></i> Finalizar Consulta y Guardar Diagnóstico
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

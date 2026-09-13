@@ -1,0 +1,85 @@
+@page
+@model PW3_04.Pages.Propietarios.CreateModel
+@{
+    ViewData["Title"] = "Registrar Propietario";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-person-plus text-primary me-2"></i>Ficha de Nuevo Propietario</h4>
+                <p class="text-muted small mb-0">Ingrese los datos de contacto del tutor de mascotas</p>
+            </div>
+            <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        </div>
+
+        <div class="clinic-card">
+            <div class="clinic-card-body p-4">
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small" role="alert"></div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Propietario.Nombre" class="form-label"></label>
+                            <input asp-for="Propietario.Nombre" class="form-control" placeholder="Ej: Homero" />
+                            <span asp-validation-for="Propietario.Nombre" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Propietario.Apellidos" class="form-label"></label>
+                            <input asp-for="Propietario.Apellidos" class="form-control" placeholder="Ej: Simpson" />
+                            <span asp-validation-for="Propietario.Apellidos" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Propietario.Telefono" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-telephone"></i></span>
+                                <input asp-for="Propietario.Telefono" class="form-control" placeholder="+56 9 1234 5678" />
+                            </div>
+                            <span asp-validation-for="Propietario.Telefono" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Propietario.Email" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Propietario.Email" class="form-control" placeholder="ejemplo@correo.com" />
+                            </div>
+                            <span asp-validation-for="Propietario.Email" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Propietario.Direccion" class="form-label"></label>
+                        <input asp-for="Propietario.Direccion" class="form-control" placeholder="Calle, número, comuna o sector" />
+                        <span asp-validation-for="Propietario.Direccion" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4 form-check form-switch">
+                        <input asp-for="Propietario.Estado" class="form-check-input" type="checkbox" role="switch" checked />
+                        <label asp-for="Propietario.Estado" class="form-check-label fw-semibold">
+                            Propietario Activo en el Sistema
+                        </label>
+                        <div class="form-text small">Indica si el propietario puede tener citas vigentes y mascotas activas.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                        <a asp-page="./Index" class="btn btn-clinic-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-clinic-primary">
+                            <i class="bi bi-check-lg"></i> Guardar Propietario
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

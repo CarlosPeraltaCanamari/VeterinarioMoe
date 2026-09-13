@@ -1,0 +1,175 @@
+﻿@page
+@model PW3_04.Pages.Citas.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Citas Médicas";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-calendar2-check-fill text-secondary me-2"></i>Agenda de Citas Clínicas</h3>
+        <p class="text-muted small mb-0">Control de consultas, turnos y diagnósticos de El Arca de Moe</p>
+    </div>
+    <a asp-page="Create" class="btn btn-clinic-primary">
+        <i class="bi bi-calendar-plus-fill"></i> Agendar Nueva Cita
+    </a>
+</div>
+<div class="clinic-card mb-4">
+    <div class="clinic-card-body py-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" name="Buscar" value="@Model.Buscar" class="form-control" placeholder="Buscar paciente, tutor, médico o motivo..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="EstadoFiltro" class="form-select form-select-sm">
+                    <option value="">Todos los Estados</option>
+                    <option value="Pendiente" selected="@(Model.EstadoFiltro == "Pendiente")">Pendientes</option>
+                    <option value="Completada" selected="@(Model.EstadoFiltro == "Completada")">Completadas (Con Diagnóstico)</option>
+                    <option value="Cancelada" selected="@(Model.EstadoFiltro == "Cancelada")">Canceladas</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="FechaFiltro" class="form-select form-select-sm">
+                    <option value="">Cualquier Fecha</option>
+                    <option value="hoy" selected="@(Model.FechaFiltro == "hoy")">Citas de Hoy</option>
+                    <option value="proximas" selected="@(Model.FechaFiltro == "proximas")">Próximas Citas</option>
+                    <option value="pasadas" selected="@(Model.FechaFiltro == "pasadas")">Histórico / Pasadas</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-clinic-primary flex-grow-1">Filtrar</button>
+                @if (!string.IsNullOrEmpty(Model.Buscar) || !string.IsNullOrEmpty(Model.EstadoFiltro) || !string.IsNullOrEmpty(Model.FechaFiltro))
+                {
+                    <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">Limpiar</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="clinic-card">
+    <div class="clinic-card-header">
+        <h6><i class="bi bi-list-check me-1"></i> Consultas Programadas (@Model.Citas.Count)</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table clinic-table">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Paciente (Mascota)</th>
+                    <th>Tutor Responsable</th>
+                    <th>Veterinario Asignado</th>
+                    <th>Motivo de Consulta</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Citas.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="bi bi-calendar-x fs-2 d-block mb-2 text-secondary"></i>
+                            No hay citas registradas que coincidan con los filtros seleccionados.
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Model.Citas)
+                {
+                    <tr>
+                        <td class="text-nowrap">
+                            <div class="fw-bold text-dark">
+                                <i class="bi bi-clock text-primary me-1"></i>@item.FechaHora.ToString("dd/MM/yyyy")
+                            </div>
+                            <small class="text-muted">@item.FechaHora.ToString("HH:mm") hrs</small>
+                        </td>
+                        <td>
+                            @if (item.Mascota != null)
+                            {
+                                <a asp-page="/Mascotas/Details" asp-route-id="@item.MascotaId" class="text-decoration-none fw-semibold text-dark">
+                                    @item.Mascota.Nombre
+                                </a>
+                                <small class="text-muted d-block" style="font-size: 0.775rem;">@item.Mascota.Especie - @item.Mascota.Raza</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Mascota no encontrada</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Mascota?.Propietario != null)
+                            {
+                                <a asp-page="/Propietarios/Details" asp-route-id="@item.Mascota.PropietarioId" class="text-decoration-none text-dark">
+                                    @item.Mascota.Propietario.NombreCompleto
+                                </a>
+                                <small class="text-muted d-block" style="font-size: 0.775rem;">@item.Mascota.Propietario.Telefono</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">--</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Veterinario != null)
+                            {
+                                <a asp-page="/Veterinarios/Details" asp-route-id="@item.VeterinarioId" class="text-decoration-none text-dark fw-medium">
+                                    @item.Veterinario.NombreCompleto
+                                </a>
+                                <small class="text-muted d-block" style="font-size: 0.775rem;">@item.Veterinario.Especialidad</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Por asignar</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@item.Motivo">
+                                @item.Motivo
+                            </span>
+                            @if (!string.IsNullOrEmpty(item.Diagnostico))
+                            {
+                                <small class="d-block text-success fw-medium">
+                                    <i class="bi bi-file-earmark-medical me-1"></i>Diagnóstico emitido
+                                </small>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Estado == EstadosCita.Pendiente)
+                            {
+                                <span class="badge-status badge-status-pendiente">Pendiente</span>
+                            }
+                            else if (item.Estado == EstadosCita.Completada)
+                            {
+                                <span class="badge-status badge-status-completada">Completada</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-status-cancelada">Cancelada</span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            @if (item.Estado == EstadosCita.Pendiente)
+                            {
+                                <a asp-page="./Atender" asp-route-id="@item.Id" class="btn btn-sm btn-clinic-primary py-1 px-2" title="Atender Consulta y Registrar Diagnóstico">
+                                    <i class="bi bi-stethoscope"></i> Atender
+                                </a>
+                            }
+                            <div class="btn-group btn-group-sm">
+                                <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Detalles">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-clinic-outline text-danger py-1 px-2" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

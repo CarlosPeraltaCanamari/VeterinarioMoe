@@ -1,0 +1,146 @@
+﻿@page
+@model PW3_04.Pages.Mascotas.IndexModel
+@{
+    ViewData["Title"] = "Pacientes (Mascotas)";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-hearts text-secondary me-2"></i>Pacientes Registrados</h3>
+        <p class="text-muted small mb-0">Fichas clínicas de pacientes de la Clínica Veterinaria El Arca de Moe</p>
+    </div>
+    <a asp-page="Create" class="btn btn-clinic-primary">
+        <i class="bi bi-plus-circle-fill"></i> Registrar Mascota
+    </a>
+</div>
+<div class="clinic-card mb-4">
+    <div class="clinic-card-body py-3">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" name="Buscar" value="@Model.Buscar" class="form-control" placeholder="Buscar por nombre, raza o tutor..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="EspecieFiltro" class="form-select form-select-sm">
+                    <option value="">Todas las Especies</option>
+                    <option value="Canino" selected="@(Model.EspecieFiltro == "Canino")">Caninos</option>
+                    <option value="Felino" selected="@(Model.EspecieFiltro == "Felino")">Felinos</option>
+                    <option value="Ave" selected="@(Model.EspecieFiltro == "Ave")">Aves</option>
+                    <option value="Roedor" selected="@(Model.EspecieFiltro == "Roedor")">Roedores</option>
+                    <option value="Exótico" selected="@(Model.EspecieFiltro == "Exótico")">Exóticos / Otros</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="EstadoFiltro" class="form-select form-select-sm">
+                    <option value="">Todos</option>
+                    <option value="activo" selected="@(Model.EstadoFiltro == "activo")">Activos</option>
+                    <option value="inactivo" selected="@(Model.EstadoFiltro == "inactivo")">Inactivos</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-clinic-primary flex-grow-1">Filtrar</button>
+                @if (!string.IsNullOrEmpty(Model.Buscar) || !string.IsNullOrEmpty(Model.EspecieFiltro) || !string.IsNullOrEmpty(Model.EstadoFiltro))
+                {
+                    <a asp-page="./Index" class="btn btn-sm btn-clinic-outline">Limpiar</a>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<div class="clinic-card">
+    <div class="clinic-card-header">
+        <h6><i class="bi bi-list-ul me-1"></i> Pacientes Registrados (@Model.Mascotas.Count)</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table clinic-table">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Especie / Raza</th>
+                    <th>Tutor (Propietario)</th>
+                    <th>Edad Estimada</th>
+                    <th>Sexo / Peso</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Mascotas.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-folder-x fs-3 d-block mb-1"></i>
+                            No se encontraron pacientes registrados con los criterios seleccionados.
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Model.Mascotas)
+                {
+                    var edadAnios = DateTime.Today.Year - item.FechaNacimiento.Year;
+                    if (item.FechaNacimiento.Date > DateTime.Today.AddYears(-edadAnios)) { edadAnios--; }
+
+                    <tr>
+                        <td class="fw-semibold">
+                            <i class="bi bi-heart-pulse-fill text-primary me-1"></i>@item.Nombre
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@item.Especie</span>
+                            <small class="text-muted ms-1">@(string.IsNullOrEmpty(item.Raza) ? "Mestizo" : item.Raza)</small>
+                        </td>
+                        <td>
+                            @if (item.Propietario != null)
+                            {
+                                <a asp-page="/Propietarios/Details" asp-route-id="@item.PropietarioId" class="text-decoration-none text-dark fw-medium">
+                                    <i class="bi bi-person me-1 text-muted"></i>@item.Propietario.NombreCompleto
+                                </a>
+                                <small class="d-block text-muted" style="font-size: 0.775rem;">@item.Propietario.Telefono</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin tutor asignado</span>
+                            }
+                        </td>
+                        <td>
+                            @(edadAnios > 0 ? $"{edadAnios} año(s)" : "Menor de 1 año")
+                        </td>
+                        <td>
+                            <span>@item.Sexo</span>
+                            @if (item.PesoKg.HasValue)
+                            {
+                                <small class="text-muted d-block">@item.PesoKg kg</small>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Estado)
+                            {
+                                <span class="badge-status badge-status-activo">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-status-inactivo">Inactivo</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a asp-page="/Citas/Create" asp-route-mascotaId="@item.Id" class="btn btn-clinic-outline text-primary py-1 px-2" title="Agendar Cita">
+                                    <i class="bi bi-calendar-plus"></i>
+                                </a>
+                                <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Ficha Clínica">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-clinic-outline py-1 px-2" title="Modificar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-clinic-outline text-danger py-1 px-2" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

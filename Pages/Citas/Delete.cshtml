@@ -1,0 +1,43 @@
+@page "{id:int}"
+@model PW3_04.Pages.Citas.DeleteModel
+@{
+    ViewData["Title"] = "Eliminar Cita Médica";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="clinic-card border-danger">
+            <div class="clinic-card-header bg-danger-subtle text-danger py-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-calendar-x-fill me-2"></i>Confirmar Eliminación de Cita</h5>
+            </div>
+            <div class="clinic-card-body p-4">
+                <p class="text-danger fw-semibold">
+                    ¿Está seguro que desea eliminar este registro de cita?
+                </p>
+
+                <div class="border rounded p-3 bg-light mb-4">
+                    <h6 class="fw-bold text-dark mb-2">Consulta para @Model.Cita.Mascota?.Nombre</h6>
+                    <ul class="list-unstyled mb-0 small text-muted">
+                        <li><strong>Fecha y Hora:</strong> @Model.Cita.FechaHora.ToString("dd/MM/yyyy HH:mm")</li>
+                        <li><strong>Veterinario:</strong> @(Model.Cita.Veterinario?.NombreCompleto ?? "No asignado")</li>
+                        <li><strong>Tutor:</strong> @(Model.Cita.Mascota?.Propietario?.NombreCompleto ?? "Sin tutor")</li>
+                        <li><strong>Motivo:</strong> @Model.Cita.Motivo</li>
+                        <li><strong>Estado Actual:</strong> @Model.Cita.Estado</li>
+                    </ul>
+                </div>
+
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Cita.Id" />
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-page="./Index" class="btn btn-clinic-outline">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash-fill me-1"></i> Sí, Eliminar Cita
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

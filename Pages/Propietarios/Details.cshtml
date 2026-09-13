@@ -1,0 +1,112 @@
+﻿@page
+@model PW3_04.Pages.Propietarios.DetailsModel
+@{
+    ViewData["Title"] = "Ficha del Propietario";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h4 class="fw-bold mb-1"><i class="bi bi-person-vcard text-primary me-2"></i>Ficha del Tutor</h4>
+        <p class="text-muted small mb-0">ID #@Model.Propietario.Id &bull; @Model.Propietario.NombreCompleto</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="./Index" class="btn btn-clinic-outline">
+            <i class="bi bi-arrow-left"></i> Directorio
+        </a>
+        <a asp-page="./Edit" asp-route-id="@Model.Propietario.Id" class="btn btn-clinic-primary">
+            <i class="bi bi-pencil"></i> Modificar Datos
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="clinic-card mb-4">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-person me-1"></i> Información General</h6>
+                @if (Model.Propietario.Estado)
+                {
+                    <span class="badge-status badge-status-activo">Activo</span>
+                }
+                else
+                {
+                    <span class="badge-status badge-status-inactivo">Inactivo</span>
+                }
+            </div>
+            <div class="clinic-card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-muted">Nombre:</dt>
+                    <dd class="col-sm-7 fw-semibold">@Model.Propietario.NombreCompleto</dd>
+
+                    <dt class="col-sm-5 text-muted">Teléfono:</dt>
+                    <dd class="col-sm-7">
+                        <a href="tel:@Model.Propietario.Telefono" class="text-decoration-none text-dark fw-medium">
+                            <i class="bi bi-telephone text-primary me-1"></i>@Model.Propietario.Telefono
+                        </a>
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted">Correo:</dt>
+                    <dd class="col-sm-7">
+                        <a href="mailto:@Model.Propietario.Email" class="text-decoration-none text-muted">
+                            <i class="bi bi-envelope text-primary me-1"></i>@Model.Propietario.Email
+                        </a>
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted">Dirección:</dt>
+                    <dd class="col-sm-7">@(string.IsNullOrEmpty(Model.Propietario.Direccion) ? "No especificada" : Model.Propietario.Direccion)</dd>
+
+                    <dt class="col-sm-5 text-muted">Fecha Registro:</dt>
+                    <dd class="col-sm-7 text-muted">@Model.Propietario.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="clinic-card">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-heart me-1"></i> Pacientes a su Cuidado (@Model.Propietario.Mascotas.Count)</h6>
+                <a asp-page="/Mascotas/Create" asp-route-propietarioId="@Model.Propietario.Id" class="btn btn-sm btn-clinic-primary">
+                    <i class="bi bi-plus-circle"></i> Nueva Mascota
+                </a>
+            </div>
+            <div class="clinic-card-body p-0">
+                @if (!Model.Propietario.Mascotas.Any())
+                {
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-shield-x fs-2 d-block mb-1"></i>
+                        No tiene mascotas registradas actualmente.
+                    </div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var pet in Model.Propietario.Mascotas)
+                        {
+                            <div class="list-group-item p-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold text-dark">
+                                        <i class="bi bi-patch-check text-primary me-1"></i>@pet.Nombre
+                                        <span class="badge bg-light text-dark border ms-2">@pet.Especie</span>
+                                    </div>
+                                    <div class="small text-muted mt-1">
+                                        <span><strong>Raza:</strong> @(string.IsNullOrEmpty(pet.Raza) ? "Mestizo" : pet.Raza)</span> &bull; 
+                                        <span><strong>Sexo:</strong> @pet.Sexo</span> &bull; 
+                                        <span><strong>Peso:</strong> @(pet.PesoKg.HasValue ? $"{pet.PesoKg} kg" : "No registrado")</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a asp-page="/Mascotas/Details" asp-route-id="@pet.Id" class="btn btn-sm btn-clinic-outline">
+                                        Ficha
+                                    </a>
+                                    <a asp-page="/Citas/Create" asp-route-mascotaId="@pet.Id" class="btn btn-sm btn-clinic-primary" title="Agendar Cita">
+                                        <i class="bi bi-calendar-plus"></i> Agendar
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
