@@ -1,0 +1,178 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Panel de Control Clínico";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-4 small" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+    <div>
+        <h3 class="fw-bold mb-1">
+            <i class="bi bi-hospital text-primary me-2"></i>Clínica Veterinaria "El Arca de Moe"
+        </h3>
+        <p class="text-muted small mb-0">Sistema Integral de Gestión de Citas, Fichas de Pacientes y Diagnósticos Clínicos</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="/Citas/Create" class="btn btn-clinic-primary">
+            <i class="bi bi-calendar-plus"></i> Agendar Cita
+        </a>
+        <a asp-page="/Mascotas/Create" class="btn btn-clinic-outline">
+            <i class="bi bi-plus-circle"></i> Nuevo Paciente
+        </a>
+    </div>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="bi bi-calendar2-day"></i>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalCitasHoy</div>
+                <div class="stat-label">Citas para Hoy</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon warning">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalCitasPendientes</div>
+                <div class="stat-label">Citas Pendientes</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon info">
+                <i class="bi bi-hearts"></i>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalMascotasActivas</div>
+                <div class="stat-label">Pacientes Activos</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="bi bi-person-badge"></i>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalVeterinariosActivos</div>
+                <div class="stat-label">Médicos de Turno</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="clinic-card">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-calendar-week me-1"></i> Próximos Turnos y Consultas Pendientes</h6>
+                <a asp-page="/Citas/Index" class="btn btn-sm btn-clinic-outline">Ver Toda la Agenda</a>
+            </div>
+            <div class="clinic-card-body p-0">
+                @if (!Model.ProximasCitas.Any())
+                {
+                    <div class="p-4 text-center text-muted">
+                        <i class="bi bi-check-all fs-2 text-success d-block mb-1"></i>
+                        No hay consultas pendientes programadas para las próximas horas.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table clinic-table">
+                            <thead>
+                                <tr>
+                                    <th>Horario</th>
+                                    <th>Paciente</th>
+                                    <th>Tutor</th>
+                                    <th>Veterinario</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cita in Model.ProximasCitas)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@cita.FechaHora.ToString("dd/MM HH:mm")</strong>
+                                        </td>
+                                        <td>
+                                            <a asp-page="/Mascotas/Details" asp-route-id="@cita.MascotaId" class="text-dark fw-bold text-decoration-none">
+                                                @cita.Mascota?.Nombre
+                                            </a>
+                                            <small class="text-muted d-block" style="font-size: 0.75rem;">@cita.Mascota?.Especie</small>
+                                        </td>
+                                        <td class="small">
+                                            @cita.Mascota?.Propietario?.NombreCompleto
+                                        </td>
+                                        <td class="small">
+                                            Dr(a). @cita.Veterinario?.Nombre
+                                        </td>
+                                        <td class="text-end">
+                                            <a asp-page="/Citas/Atender" asp-route-id="@cita.Id" class="btn btn-sm btn-clinic-primary py-1 px-2" title="Atender">
+                                                <i class="bi bi-stethoscope"></i> Atender
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="clinic-card mb-4">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-lightning-charge me-1"></i> Módulos Rápidos</h6>
+            </div>
+            <div class="clinic-card-body d-flex flex-column gap-2">
+                <a asp-page="/Citas/Create" class="btn btn-clinic-outline text-start">
+                    <i class="bi bi-calendar-plus text-primary me-2"></i> Agendar Nueva Consulta
+                </a>
+                <a asp-page="/Mascotas/Create" class="btn btn-clinic-outline text-start">
+                    <i class="bi bi-heart-pulse text-danger me-2"></i> Registrar Paciente (Mascota)
+                </a>
+                <a asp-page="/Propietarios/Create" class="btn btn-clinic-outline text-start">
+                    <i class="bi bi-person-plus text-info me-2"></i> Registrar Tutor (Propietario)
+                </a>
+                <a asp-page="/Veterinarios/Index" class="btn btn-clinic-outline text-start">
+                    <i class="bi bi-person-badge text-success me-2"></i> Consultar Médicos y Especialidades
+                </a>
+            </div>
+        </div>
+        <div class="clinic-card">
+            <div class="clinic-card-header">
+                <h6><i class="bi bi-database-check me-1"></i> Conexión Supabase (PostgreSQL)</h6>
+            </div>
+            <div class="clinic-card-body small text-muted">
+                <p class="mb-2">
+                    El sistema está configurado con <strong>Entity Framework Core</strong> y el proveedor <strong>Npgsql (PostgreSQL)</strong> para Supabase.
+                </p>
+                <div class="bg-light p-2 rounded border mb-2">
+                    <i class="bi bi-file-earmark-code text-primary me-1"></i>
+                    Script SQL listo: <code>supabase_schema.sql</code>
+                </div>
+                <p class="mb-0">
+                    Copia y ejecuta el archivo SQL en el <em>SQL Editor</em> de tu proyecto Supabase para inicializar las tablas, llaves foráneas y datos de prueba.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
