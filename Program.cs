@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("SupabaseConnection") ?? string.Empty;
 
-if (string.IsNullOrWhiteSpace(connectionString) || connectionString.Contains("yourprojectid"))
+if (string.IsNullOrWhiteSpace(connectionString) 
+    || connectionString.Contains("yourprojectid") 
+    || connectionString.Contains("[YOUR-PASSWORD]") 
+    || connectionString.Contains("[TU_CONTRASEÑA]"))
 {
     builder.Services.AddDbContext<ArcaMoeDbContext>(options =>
         options.UseInMemoryDatabase("ArcaDeMoeLocalDb"));
