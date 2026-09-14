@@ -63,7 +63,7 @@ namespace PW3_04.Data
                         Nombre = "Moe",
                         Apellidos = "Szyslak",
                         Especialidad = "Cirugía y Traumatología",
-                        Telefono = "+56 9 8765 4321",
+                        Telefono = "+591 71234567",
                         Email = "moe@elarcademoe.com",
                         Estado = true,
                         FechaRegistro = DateTime.UtcNow
@@ -74,7 +74,7 @@ namespace PW3_04.Data
                         Nombre = "Lisa",
                         Apellidos = "Simpson",
                         Especialidad = "Medicina Felina y Exóticos",
-                        Telefono = "+56 9 8123 4567",
+                        Telefono = "+591 72345678",
                         Email = "lisa.simpson@elarcademoe.com",
                         Estado = true,
                         FechaRegistro = DateTime.UtcNow
@@ -85,7 +85,7 @@ namespace PW3_04.Data
                         Nombre = "Carlos",
                         Apellidos = "Mendoza",
                         Especialidad = "Medicina General y Preventiva",
-                        Telefono = "+56 9 7654 3210",
+                        Telefono = "+591 73456789",
                         Email = "cmendoza@elarcademoe.com",
                         Estado = true,
                         FechaRegistro = DateTime.UtcNow
@@ -102,7 +102,7 @@ namespace PW3_04.Data
                     {
                         Nombre = "Homero",
                         Apellidos = "Simpson",
-                        Telefono = "+56 9 1111 2222",
+                        Telefono = "+591 70112233",
                         Email = "homero@springfield.com",
                         Direccion = "Av. Siempre Viva 742",
                         Estado = true,
@@ -113,7 +113,7 @@ namespace PW3_04.Data
                     {
                         Nombre = "Ned",
                         Apellidos = "Flanders",
-                        Telefono = "+56 9 3333 4444",
+                        Telefono = "+591 70223344",
                         Email = "ned@flanders.com",
                         Direccion = "Av. Siempre Viva 744",
                         Estado = true,
@@ -124,7 +124,7 @@ namespace PW3_04.Data
                     {
                         Nombre = "Patricia",
                         Apellidos = "Bouvier",
-                        Telefono = "+56 9 5555 6666",
+                        Telefono = "+591 70334455",
                         Email = "patricia.b@springfield.com",
                         Direccion = "Calle Elm 123",
                         Estado = true,

@@ -97,9 +97,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_usuarios_email ON public.usuarios(email);
 -- Propietarios de muestra
 INSERT INTO public.propietarios (id, nombre, apellidos, telefono, email, direccion, estado)
 VALUES 
-(1, 'Homero', 'Simpson', '+56 9 1111 2222', 'homero@springfield.com', 'Av. Siempre Viva 742', TRUE),
-(2, 'Ned', 'Flanders', '+56 9 3333 4444', 'ned@flanders.com', 'Av. Siempre Viva 744', TRUE),
-(3, 'Patricia', 'Bouvier', '+56 9 5555 6666', 'patricia.b@springfield.com', 'Calle Elm 123', TRUE)
+(1, 'Homero', 'Simpson', '+591 70112233', 'homero@springfield.com', 'Av. Siempre Viva 742', TRUE),
+(2, 'Ned', 'Flanders', '+591 70223344', 'ned@flanders.com', 'Av. Siempre Viva 744', TRUE),
+(3, 'Patricia', 'Bouvier', '+591 70334455', 'patricia.b@springfield.com', 'Calle Elm 123', TRUE)
 ON CONFLICT (id) DO NOTHING;
 
 -- Mascotas de muestra
@@ -113,9 +113,9 @@ ON CONFLICT (id) DO NOTHING;
 -- Veterinarios de muestra
 INSERT INTO public.veterinarios (id, nombre, apellidos, especialidad, telefono, email, estado)
 VALUES 
-(1, 'Moe', 'Szyslak', 'Cirugía y Traumatología', '+56 9 8765 4321', 'moe@elarcademoe.com', TRUE),
-(2, 'Lisa', 'Simpson', 'Medicina Felina y Exóticos', '+56 9 8123 4567', 'lisa.simpson@elarcademoe.com', TRUE),
-(3, 'Carlos', 'Mendoza', 'Medicina General y Preventiva', '+56 9 7654 3210', 'cmendoza@elarcademoe.com', TRUE)
+(1, 'Moe', 'Szyslak', 'Cirugía y Traumatología', '+591 71234567', 'moe@elarcademoe.com', TRUE),
+(2, 'Lisa', 'Simpson', 'Medicina Felina y Exóticos', '+591 72345678', 'lisa.simpson@elarcademoe.com', TRUE),
+(3, 'Carlos', 'Mendoza', 'Medicina General y Preventiva', '+591 73456789', 'cmendoza@elarcademoe.com', TRUE)
 ON CONFLICT (id) DO NOTHING;
 
 -- Citas de muestra
